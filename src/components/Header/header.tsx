@@ -2,26 +2,38 @@ import React, { FC, useState } from "react";
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 
 interface HeaderProps{
-    onSelectCategory: (category:string) => void;
+    onSelectCategory: (category: string, searchValue: string) => void;
 }
 
 const Header: FC<HeaderProps> = ({onSelectCategory}) => {
 
     const [selectedCategory, setSelectedCategory] = useState("");
+    const [searchValue, setSearchValue] = useState("");
 
     const handleCategorySelect = (category: string) => {
         setSelectedCategory(category);
-        onSelectCategory(category);
-      };
-    
-    
+        onSelectCategory(category, searchValue);
+    };
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setSearchValue(value);
+        onSelectCategory(selectedCategory, value);
+    };
+  
+
     return (
         <div>
             <div className="flex justify-between items-center py-2 px-6 bg-blue-600 font-bold">
                 Hookah menu
 
                 <div className="flex items-center rounded-full bg-gray-200 p-2 text-base">
-                    <input type="text" className="border-none bg-transparent flex-grow mr-2" placeholder="Search..." />
+                    <input type="text" 
+                    className="border-none bg-transparent flex-grow mr-2"
+                    placeholder="Search..." 
+                    value={searchValue}
+                    onChange={handleSearchChange}
+                    />
                     <div className="flex justify-center items-center bg-blue-600 rounded-full h-10 w-10">
                         <SearchRoundedIcon className="text-white text-xl" />
                     </div>

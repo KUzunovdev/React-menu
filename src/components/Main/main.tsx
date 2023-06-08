@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useMemo } from "react";
 import axios, { AxiosResponse } from "axios";
 
 interface Product {
@@ -47,7 +47,7 @@ interface ResponseData {
   лист1: Product[];
 }
 
-const Main: FC<{ selectedCategory: string }> = ({ selectedCategory }) => {
+const Main: FC<{  selectedCategory: string; searchValue?: string }> = ({ selectedCategory, searchValue }) => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
@@ -62,13 +62,24 @@ const Main: FC<{ selectedCategory: string }> = ({ selectedCategory }) => {
   }, []);
 
   
-  const filteredProducts = selectedCategory && selectedCategory !== "All"
+  const filteredProducts = useMemo(() => {
+    let filtered = selectedCategory && selectedCategory !== "All"
   ? products.filter(
       product =>
         product.category.toLowerCase().trim() ===
         selectedCategory.toLowerCase().trim()
     )
   : products;
+
+  if(searchValue) {
+    filtered = filtered.filter(
+      product =>
+      product.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchValue.toLowerCase())
+    );
+  }
+    return filtered;
+}, [products,selectedCategory,searchValue] );
 
   return (
     <div className="flex flex-wrap justify-center h-full">

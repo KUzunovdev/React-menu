@@ -5,17 +5,19 @@ import Main from './components/Main/main';
 function App() {
   
   const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [searchValue, setSearchValue] = useState<string>("");
 
-  const handleCategorySelect = (category: string) => {
+  const handleCategorySelect = (category: string, searchValue: string) => {
     setSelectedCategory(category);
+    setSearchValue(searchValue);
   };
 
+  
 
   return (
     <div>
       <Header onSelectCategory={handleCategorySelect} />
-      <Main selectedCategory={selectedCategory} />
-
+      <Main selectedCategory={selectedCategory} searchValue={searchValue} />
     </div>
   );
 }
